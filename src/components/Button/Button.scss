@@ -1,0 +1,15 @@
+.button {
+  cursor: pointer;
+  border: none;
+  background-color: #191919;
+  color: #919191;
+  font-size: large;
+
+  &:hover {
+    filter: brightness(1.25);
+  }
+
+  &:active {
+    box-shadow: inset 0px 0px 30px 20px rgba(0, 0, 0, 0.3);
+  }
+}
