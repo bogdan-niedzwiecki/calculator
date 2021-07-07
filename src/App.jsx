@@ -10,6 +10,7 @@ class App extends Component {
     output: "",
     input: "0",
     answer: "",
+    pressedKeys: [],
   };
 
   isInputZero = () => {
@@ -60,7 +61,7 @@ class App extends Component {
   };
 
   onDigit = (sign) => {
-    if (this.state.answer) {
+    if (this.state.answer !== "") {
       this.setState((state) => ({
         ...state,
         output: sign,
@@ -100,7 +101,7 @@ class App extends Component {
   };
 
   onDecimal = (sign) => {
-    if (this.state.answer) {
+    if (this.state.answer !== "") {
       this.setState((state) => ({
         ...state,
         output: state.answer + sign,
@@ -125,7 +126,7 @@ class App extends Component {
   };
 
   onOperator = (sign) => {
-    if (this.state.answer) {
+    if (this.state.answer !== "") {
       this.setState((state) => ({
         ...state,
         output: state.answer + sign,
@@ -200,6 +201,34 @@ class App extends Component {
     }
   };
 
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeydown);
+    document.addEventListener("keyup", this.handleKeyup);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeydown);
+    document.removeEventListener("keyup", this.handleKeyup);
+  }
+
+  handleKeydown = (event) => {
+    const button = buttons.find((button) => button.key === event.key);
+    if (button) {
+      this.handleButtonClick(button.sign, button.type);
+      this.setState((state) => ({
+        ...state,
+        pressedKeys: [...state.pressedKeys, button.key],
+      }));
+    }
+  };
+
+  handleKeyup = (event) => {
+    this.setState((state) => ({
+      ...state,
+      pressedKeys: state.pressedKeys.filter((key) => key !== event.key),
+    }));
+  };
+
   render() {
     const { input, output } = this.state;
 
@@ -214,6 +243,8 @@ class App extends Component {
             {buttons.map((button) => (
               <Button
                 key={button.id}
+                pressedKeys={this.state.pressedKeys}
+                press={button.key}
                 sign={button.sign}
                 type={button.type}
                 id={button.id}
