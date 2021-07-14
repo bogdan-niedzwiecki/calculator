@@ -32,6 +32,20 @@
     background-color: #0c0c0c;
     color: white;
     padding: 10px 20px;
+
+    &-output {
+      font-size: 20px;
+      min-height: 30px;
+      color: #919191;
+      overflow: hidden;
+    }
+    
+    &-input {
+      font-size: 30px;
+      min-height: 40px;
+      font-weight: bold;
+      overflow: hidden;
+    }
   }
 
   &__buttons {

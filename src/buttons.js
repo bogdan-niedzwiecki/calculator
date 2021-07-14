@@ -9,11 +9,11 @@ export const buttons = [
   { sign: "7", id: "seven", type: "digit", key: "7" },
   { sign: "8", id: "eight", type: "digit", key: "8" },
   { sign: "9", id: "nine", type: "digit", key: "9" },
+  { sign: ".", id: "decimal", type: "decimal", key: "." },
   { sign: "+", id: "add", type: "operator", key: "+" },
   { sign: "-", id: "subtract", type: "operator", key: "-" },
   { sign: "*", id: "multiply", type: "operator", key: "*" },
   { sign: "/", id: "divide", type: "operator", key: "/" },
   { sign: "=", id: "equals", type: "equals", key: "Enter" },
-  { sign: ".", id: "decimal", type: "decimal", key: "." },
   { sign: "AC", id: "clear", type: "clear", key: "Escape" },
 ];

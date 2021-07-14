@@ -1,204 +1,17 @@
 import { Component } from "react";
 import "./App.scss";
 import Button from "./components/Button/Button.jsx";
-import Input from "./components/Input/Input.jsx";
-import Output from "./components/Output/Output.jsx";
 import { buttons } from "./buttons";
 
 class App extends Component {
   state = {
-    output: "",
+    output: "0",
     input: "0",
     answer: "",
     pressedKeys: [],
-  };
-
-  isInputZero = () => {
-    return this.state.input === "0" || this.state.input === "-0";
-  };
-
-  isInputDecimal = () => {
-    return this.state.input.indexOf(".") !== -1;
-  };
-
-  isInputOperator = () => {
-    return this.state.input.match(/^[+-/*//]$/);
-  };
-
-  isOutputEmpty = () => {
-    return this.state.output === "";
-  };
-
-  isOutputZeroOrEmpty = () => {
-    return this.state.output === "0" || this.state.output === "";
-  };
-
-  isOutputEndsWithDigital = () => {
-    return this.state.output.match(/\d$/);
-  };
-
-  isOutputEndsWithDivideOrMultiply = () => {
-    return this.state.output.match(/[*/]$/);
-  };
-
-  isOutputEndsWithDivideOrMultiplyAndMinus = () => {
-    return this.state.output.match(/[*/][-]$/);
-  };
-
-  isOutputHasOperator = () => {
-    return this.state.output.match(/[*/+-]/);
-  };
-
-  isAnswer = () => {
-    return this.state.answer;
-  };
-
-  onClear = () => {
-    this.setState(() => ({
-      output: "",
-      input: "0",
-    }));
-  };
-
-  onDigit = (sign) => {
-    if (this.state.answer !== "") {
-      this.setState((state) => ({
-        ...state,
-        output: sign,
-        input: sign,
-        answer: "",
-      }));
-    } else {
-      if (this.isInputZero() && this.isOutputZeroOrEmpty()) {
-        this.setState((state) => ({
-          ...state,
-          output: sign,
-          input: sign,
-        }));
-      } else if (
-        this.isInputOperator() &&
-        !this.isOutputEndsWithDivideOrMultiplyAndMinus()
-      ) {
-        this.setState((state) => ({
-          ...state,
-          output: state.output + sign,
-          input: sign,
-        }));
-      } else if (!this.isInputZero()) {
-        this.setState((state) => ({
-          ...state,
-          output: state.output + sign,
-          input: state.input + sign,
-        }));
-      } else {
-        this.setState((state) => ({
-          ...state,
-          output: state.output.slice(0, -1) + sign,
-          input: sign,
-        }));
-      }
-    }
-  };
-
-  onDecimal = (sign) => {
-    if (this.state.answer !== "") {
-      this.setState((state) => ({
-        ...state,
-        output: state.answer + sign,
-        input: state.input + sign,
-        answer: "",
-      }));
-    } else {
-      if (this.isOutputEmpty()) {
-        this.setState((state) => ({
-          ...state,
-          output: "0" + sign,
-          input: state.input + sign,
-        }));
-      } else if (!this.isInputDecimal() && !this.isInputOperator()) {
-        this.setState((state) => ({
-          ...state,
-          output: state.output + sign,
-          input: state.input + sign,
-        }));
-      }
-    }
-  };
-
-  onOperator = (sign) => {
-    if (this.state.answer !== "") {
-      this.setState((state) => ({
-        ...state,
-        output: state.answer + sign,
-        input: sign,
-        answer: "",
-      }));
-    } else {
-      if (this.isOutputEndsWithDigital()) {
-        this.setState((state) => ({
-          ...state,
-          output: state.output + sign,
-          input: sign,
-        }));
-      } else if (sign === "-" && this.isOutputEndsWithDivideOrMultiply()) {
-        this.setState((state) => ({
-          ...state,
-          output: state.output + sign,
-          input: sign,
-        }));
-      } else if (this.isOutputEndsWithDivideOrMultiplyAndMinus()) {
-        this.setState((state) => ({
-          ...state,
-          output: state.output.slice(0, -2) + sign,
-          input: sign,
-        }));
-      } else {
-        this.setState((state) => ({
-          ...state,
-          output: state.output.slice(0, -1) + sign,
-          input: sign,
-        }));
-      }
-    }
-  };
-
-  onEquals = () => {
-    if (
-      this.isOutputEndsWithDigital() &&
-      this.isOutputHasOperator() &&
-      !this.isAnswer()
-    ) {
-      this.setState((state) => {
-        const answer = Math.round(eval(state.output) * 100) / 100;
-        return {
-          output: state.output + "=" + answer,
-          input: answer,
-          answer: answer,
-        };
-      });
-    }
-  };
-
-  handleButtonClick = (sign, type) => {
-    switch (type) {
-      case "clear":
-        this.onClear();
-        break;
-      case "digit":
-        this.onDigit(sign);
-        break;
-      case "operator":
-        this.onOperator(sign);
-        break;
-      case "decimal":
-        this.onDecimal(sign);
-        break;
-      case "equals":
-        this.onEquals();
-        break;
-      default:
-        console.log("Sorry, we are out of " + type + ".");
-    }
+    blockedButtons: ["0", "+", "*", "/", "="],
+    initialState: true,
+    lastTouched: { sign: "", type: "" },
   };
 
   componentDidMount() {
@@ -214,7 +27,9 @@ class App extends Component {
   handleKeydown = (event) => {
     const button = buttons.find((button) => button.key === event.key);
     if (button) {
-      this.handleButtonClick(button.sign, button.type);
+      if (!this.state.blockedButtons.includes(button.sign)) {
+        this.handleButtonClick(button.sign, button.type);
+      }
       this.setState((state) => ({
         ...state,
         pressedKeys: [...state.pressedKeys, button.key],
@@ -229,6 +44,186 @@ class App extends Component {
     }));
   };
 
+  handleButtonClick = (sign, type) => {
+    switch (type) {
+      case "clear":
+        this.onClear(sign, type);
+        break;
+      case "digit":
+        this.onDigit(sign, type);
+        break;
+      case "operator":
+        this.onOperator(sign, type);
+        break;
+      case "decimal":
+        this.onDecimal(sign, type);
+        break;
+      case "equals":
+        this.onEquals(sign, type);
+        break;
+      default:
+        console.log("Sorry, we are out of " + type + ".");
+    }
+  };
+
+  onClear = () => {
+    this.setState(() => ({
+      output: "0",
+      input: "0",
+      answer: "",
+      pressedKeys: [],
+      blockedButtons: ["0", "+", "*", "/", "="],
+      initialState: true,
+      lastTouched: { sign: "", type: "" },
+    }));
+  };
+
+  onDigit = (sign, type) => {
+    this.setState((state) => ({
+      ...state,
+      output: state.initialState
+        ? state.output.slice(0, -1) + sign
+        : state.output + sign,
+      input:
+        state.initialState || state.lastTouched.type === "operator"
+          ? state.input.slice(0, -1) + sign
+          : state.input + sign,
+      initialState: false,
+      blockedButtons: [
+        ...state.blockedButtons.filter(
+          (blockedButton) =>
+            blockedButton !== "0" &&
+            blockedButton !== "+" &&
+            blockedButton !== "-" &&
+            blockedButton !== "*" &&
+            blockedButton !== "/" &&
+            blockedButton !== "="
+        ),
+        ...this.blockDigitsOnFirstZeroSign(state, sign),
+      ],
+      lastTouched: { sign, type },
+    }));
+  };
+
+  onOperator = (sign, type) => {
+    this.setState((state) => ({
+      ...state,
+      output:
+        state.initialState ||
+        state.lastTouched.sign === "+" ||
+        state.lastTouched.sign === "-" ||
+        ((state.lastTouched.sign === "*" || state.lastTouched.sign === "/") &&
+          sign !== "-")
+          ? state.output.slice(0, -1) + sign
+          : state.answer !== ""
+          ? state.answer + sign
+          : state.output + sign,
+      input: sign,
+      initialState: false,
+      blockedButtons: [
+        ...state.blockedButtons.filter(
+          (blockedButton) =>
+            blockedButton !== "." &&
+            blockedButton !== "0" &&
+            blockedButton !== "1" &&
+            blockedButton !== "2" &&
+            blockedButton !== "3" &&
+            blockedButton !== "4" &&
+            blockedButton !== "5" &&
+            blockedButton !== "6" &&
+            blockedButton !== "7" &&
+            blockedButton !== "8" &&
+            blockedButton !== "9"
+        ),
+        "=",
+        ...this.blockMultiplyAndDivideOnLastMinusSign(state, sign),
+      ],
+      lastTouched: { sign, type },
+      answer: "",
+    }));
+  };
+
+  onDecimal = (sign, type) => {
+    this.setState((state) => ({
+      ...state,
+      output: state.output + sign,
+      input: state.lastTouched.type === "operator" ? sign : state.input + sign,
+      initialState: false,
+      blockedButtons: [
+        ...state.blockedButtons.filter(
+          (blockedButton) =>
+            blockedButton !== "0" &&
+            blockedButton !== "1" &&
+            blockedButton !== "2" &&
+            blockedButton !== "3" &&
+            blockedButton !== "4" &&
+            blockedButton !== "5" &&
+            blockedButton !== "6" &&
+            blockedButton !== "7" &&
+            blockedButton !== "8" &&
+            blockedButton !== "9"
+        ),
+        ".",
+        "+",
+        "-",
+        "*",
+        "/",
+      ],
+      lastTouched: { sign, type },
+    }));
+  };
+
+  onEquals = () => {
+    this.setState((state) => {
+      const answer = Math.round(eval(state.output) * 100) / 100;
+      return {
+        output: state.output + "=" + answer,
+        input: answer,
+        blockedButtons: [
+          ...state.blockedButtons.filter(
+            (blockedButton) =>
+              blockedButton !== "+" &&
+              blockedButton !== "-" &&
+              blockedButton !== "*" &&
+              blockedButton !== "/"
+          ),
+          "=",
+          ".",
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+        ],
+        answer: answer,
+      };
+    });
+  };
+
+  blockDigitsOnFirstZeroSign = (state, sign) => {
+    if (sign === "0" && state.lastTouched.type === "operator") {
+      return ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    } else {
+      return [];
+    }
+  };
+
+  blockMultiplyAndDivideOnLastMinusSign = (state, sign) => {
+    if (
+      (state.lastTouched.sign === "*" || state.lastTouched.sign === "/") &&
+      sign === "-"
+    ) {
+      return ["*", "/"];
+    } else {
+      return [];
+    }
+  };
+
   render() {
     const { input, output } = this.state;
 
@@ -236,18 +231,16 @@ class App extends Component {
       <div className="app">
         <div className="calculator">
           <div className="calculator__screen">
-            <Output output={output}></Output>
-            <Input input={input}></Input>
+            <div className="calculator__screen-output">{output}</div>
+            <div className="calculator__screen-input">{input.toString()}</div>
           </div>
           <div className="calculator__buttons">
             {buttons.map((button) => (
               <Button
+                button={button}
                 key={button.id}
                 pressedKeys={this.state.pressedKeys}
-                press={button.key}
-                sign={button.sign}
-                type={button.type}
-                id={button.id}
+                blockedButtons={this.state.blockedButtons}
                 onButtonClick={this.handleButtonClick}
               ></Button>
             ))}
