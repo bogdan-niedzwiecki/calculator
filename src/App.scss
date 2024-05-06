@@ -1,4 +1,4 @@
-@import "./styles/tools.scss";
+@import "@sass/main.scss";
 
 .app {
   background-image: linear-gradient(
@@ -15,7 +15,7 @@
   display: flex;
   justify-content: center;
 
-  @include sm {
+  @include media(sm) {
     align-items: center;
   }
 }
@@ -39,7 +39,7 @@
       color: #919191;
       overflow: hidden;
     }
-    
+
     &-input {
       font-size: 30px;
       min-height: 40px;
@@ -63,7 +63,7 @@
       "one two three equals"
       "zero zero decimal equals";
 
-    @include sm {
+    @include media(sm) {
       height: unset;
       grid-template-rows: repeat(5, 70px);
     }

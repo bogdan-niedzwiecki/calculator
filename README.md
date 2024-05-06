@@ -2,4 +2,4 @@
 
 🔥 Live: https://bn-calculator.netlify.app/
 
-#react
+#react #typescript #vite #vitest #sass #lint #husky
