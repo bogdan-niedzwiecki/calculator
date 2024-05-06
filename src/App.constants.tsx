@@ -3,7 +3,7 @@ import { Id, Key, Sign, Type } from "./App.types";
 export const buttons = [
   { sign: Sign.Zero, id: Id.Zero, type: Type.Digit, key: Key.Zero },
   { sign: Sign.One, id: Id.One, type: Type.Digit, key: Key.One },
-  { sign: Sign.Three, id: Id.Two, type: Type.Digit, key: Key.Two },
+  { sign: Sign.Two, id: Id.Two, type: Type.Digit, key: Key.Two },
   { sign: Sign.Three, id: Id.Three, type: Type.Digit, key: Key.Three },
   { sign: Sign.Four, id: Id.Four, type: Type.Digit, key: Key.Four },
   { sign: Sign.Five, id: Id.Five, type: Type.Digit, key: Key.Five },
