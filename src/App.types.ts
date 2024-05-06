@@ -18,6 +18,26 @@ export enum Sign {
   Clear = "AC",
 }
 
+export enum Id {
+  Zero = "zero",
+  One = "one",
+  Two = "two",
+  Three = "three",
+  Four = "four",
+  Five = "five",
+  Six = "six",
+  Seven = "seven",
+  Eight = "eight",
+  Nine = "nine",
+  Decimal = "decimal",
+  Equals = "equals",
+  Add = "add",
+  Subtract = "subtract",
+  Multiply = "multiply",
+  Divide = "divide",
+  Clear = "clear",
+}
+
 export enum Type {
   Digit = "digit",
   Decimal = "decimal",
@@ -44,26 +64,6 @@ export enum Key {
   Divide = "/",
   Enter = "Enter",
   Escape = "Escape",
-}
-
-export enum Id {
-  Zero = "zero",
-  One = "one",
-  Two = "two",
-  Three = "three",
-  Four = "four",
-  Five = "five",
-  Six = "six",
-  Seven = "seven",
-  Eight = "eight",
-  Nine = "nine",
-  Decimal = "decimal",
-  Equals = "equals",
-  Add = "add",
-  Subtract = "subtract",
-  Multiply = "multiply",
-  Divide = "divide",
-  Clear = "clear",
 }
 
 export interface LastTouched {
