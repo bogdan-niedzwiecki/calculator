@@ -39,14 +39,17 @@ const App = () => {
       if (!blockedButtons.includes(button.sign)) {
         handleButtonClick(button.sign, button.type);
       }
-      setPressedKeys((pressedKeys) => [...pressedKeys, button.key]);
+
+      setPressedKeys((pressedKeys) => [
+        ...new Set([...pressedKeys, button.key]),
+      ]);
     }
   };
 
   const handleKeyUp = (event: KeyboardEvent) => {
-    setPressedKeys((pressedKeys) =>
-      pressedKeys.filter((key) => key !== event.key)
-    );
+    setPressedKeys((pressedKeys) => [
+      ...new Set(pressedKeys.filter((key) => key !== event.key)),
+    ]);
   };
 
   const handleButtonClick = (sign: Sign, type: Type) => {
