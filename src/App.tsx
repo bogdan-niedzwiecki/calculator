@@ -258,7 +258,9 @@ const App = () => {
     <div className="app">
       <div className="calculator">
         <div className="calculator__screen">
-          <div className="calculator__screen-output">{output}</div>
+          <div data-testid="output" className="calculator__screen-output">
+            {output}
+          </div>
           <div className="calculator__screen-input">{input}</div>
         </div>
         <div className="calculator__buttons">

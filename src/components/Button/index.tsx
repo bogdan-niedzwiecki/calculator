@@ -19,6 +19,7 @@ const Button = ({
 
   return (
     <button
+      data-testid={button.id}
       id={button.id}
       className={className}
       onClick={blockedButtons.includes(button.sign) ? undefined : handleClick}
