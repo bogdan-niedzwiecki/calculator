@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "@components/Button";
-import "./App.scss";
 import { buttons } from "./App.constants";
 import { Key, LastTouched, Sign, Type } from "./App.types";
+import "./App.css";
 
 const App = () => {
   const [output, setOutput] = useState<string>(Sign.Zero);

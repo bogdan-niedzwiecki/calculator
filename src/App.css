@@ -1,0 +1,31 @@
+@reference "./index.css";
+
+.app {
+  @apply box-border h-screen flex justify-center md:items-center bg-gradient;
+}
+
+.calculator {
+  @apply basis-[425px] text-right shadow-[3px_7px_15px_2px_rgba(0,0,0,0.4)] border-2 border-black rounded-lg overflow-hidden;
+}
+
+.calculator__buttons {
+  @apply grid gap-0.5 bg-neutral-950 grid-cols-4 md:grid-rows-[repeat(5,70px)] grid-rows-5 h-[calc(100%-60px)];
+  grid-template-areas:
+    "clear clear divide multiply"
+    "seven eight nine subtract"
+    "four five six add"
+    "one two three equals"
+    "zero zero decimal equals";
+}
+
+.calculator__screen {
+  @apply bg-neutral-950 text-white py-2.5 px-5;
+}
+
+.calculator__screen-output {
+  @apply text-xl min-h-[30px] text-neutral-400 overflow-hidden;
+}
+
+.calculator__screen-input {
+  @apply text-3xl min-h-[40px] font-bold overflow-hidden;
+}

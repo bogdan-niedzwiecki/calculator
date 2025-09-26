@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import "./Button.scss";
 import { ButtonProps } from "./Button.types";
+import "./Button.css";
 
 const Button = ({
   pressedKeys,
